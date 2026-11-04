@@ -11,8 +11,9 @@ PDF is.
 ## How the editions were made
 
 The French texts are AI-transcribed from the original printings. The translations are AI-translated, mostly by
-OpenAI Codex models (GPT-5.6 Sol, GPT-6 Astra); parts of the English EGA and the November 2026 revision of the
-English SGA 3 are by Claude Opus 5.5 (Anthropic). Some translations used earlier human translations and typesetting
+OpenAI Codex models (GPT-5.6 Sol, GPT-6.1 Sol), whose work GPT-6 Astra (OpenAI Codex) checked, corrected and
+assembled; parts of the English EGA and the November 2026 revision of the English SGA 3 are by Claude Opus 5.5
+(Anthropic). Some translations used earlier human translations and typesetting
 as references; each repository names the models, the source texts and the human contributions it used.
 
 Errors may remain in every edition. The French EGA is being checked page by page against the printed volumes, and
