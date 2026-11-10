@@ -42,6 +42,7 @@ jobs:
           tar -xzf dl/site-*.tar.gz -C site
           test -f site/index.html && test -f site/404.html
           echo "$(find site -type f | wc -l) files, $(du -sh site | cut -f1)"
+          du -s site/* site/assets/* | sort -rn | head -6
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
