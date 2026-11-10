@@ -2,14 +2,13 @@
 # Deploys the built site of the French-school texts to GitHub Pages.
 #
 # The site is built locally (it needs MiKTeX, pandoc and the editions) and handed over as a release asset
-# site-YYYY-MM-DD[-n].tar.gz on a release whose tag starts with "site-".  This workflow deploys that tarball as a
-# Pages artifact and then deletes the release and its tag, so no built site is kept in the repository or its
+# site-YYYY-MM-DD[-n].tar.gz on a release whose tag starts with "site-"; the workflow is run on main with that tag
+# (gh workflow run pages.yml --ref main -f tag=TAG; the github-pages environment deploys from main only).  It deploys
+# that tarball as a Pages artifact and then deletes the release and its tag, so no built site is kept in the repository or its
 # releases: each deploy replaces the previous one, and a takedown is a rebuild and a new deploy (the previous
 # Pages artifact expires after one day).  Repository setting: Settings > Pages > Source = "GitHub Actions".
 name: Publish the site
 on:
-  release:
-    types: [published]
   workflow_dispatch:
     inputs:
       tag:
@@ -24,14 +23,14 @@ concurrency:
   cancel-in-progress: false
 jobs:
   deploy:
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.release.tag_name, 'site-')
+    if: startsWith(inputs.tag, 'site-')
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     env:
       GH_TOKEN: ${{ github.token }}
-      TAG: ${{ inputs.tag || github.event.release.tag_name }}
+      TAG: ${{ inputs.tag }}
     steps:
       - name: Download the built site
         run: |

@@ -10,11 +10,13 @@ PDF is.
 
 ## Website
 
-The website <https://kokunoyumeto.github.io/ega-fga-sga/> presents the texts in French, English and Spanish, with
-the printed page numbers, links between the numbered statements, a search, and machine-readable indexes of the
-statements and references (CSV and JSON). Each volume and language has its own page; where a text is not on the
-website, its page says so and links to the edition that exists. The website is built from the editions' sources and
-published from this repository with GitHub Pages (`.github/workflows/pages.yml`).
+The website <https://kokunoyumeto.github.io/ega-fga-sga/> presents the text of the SGA volumes held here, in French,
+English and Spanish: in French SGA 5, SGA 6 and SGA 7 (tomes I and II); in English SGA 1, SGA 2, SGA 4½, SGA 5,
+SGA 6 and SGA 7; in Spanish SGA 1 and SGA 7. Each exposé has its own page with the printed page numbers, links
+between the numbered statements and a search; machine-readable indexes of the statements and references (CSV and
+JSON) are linked from the home page. Volumes and languages not yet on the website have pages that say so and link to
+the editions that exist. The website is built from the editions' sources and published from this repository with
+GitHub Pages (`.github/workflows/pages.yml`).
 
 ## How the editions were made
 
