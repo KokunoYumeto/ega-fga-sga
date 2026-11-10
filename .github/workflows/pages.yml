@@ -44,6 +44,8 @@ jobs:
           retention-days: 1
       - id: deploy
         uses: actions/deploy-pages@v4
+        with:
+          timeout: 1800000
       - name: Delete the release, so the built site is not kept
         if: success()
         run: gh release delete "$TAG" -R "$GITHUB_REPOSITORY" --yes --cleanup-tag
