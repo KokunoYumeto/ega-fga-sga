@@ -8,6 +8,14 @@ Simplified Chinese, each with PDF readers and LaTeX sources.
 Each edition has its own repository. The tables below say what each one contains, how complete it is, and where its
 PDF is.
 
+## Website
+
+The website <https://kokunoyumeto.github.io/ega-fga-sga/> presents the texts in French, English and Spanish, with
+the printed page numbers, links between the numbered statements, a search, and machine-readable indexes of the
+statements and references (CSV and JSON). Each volume and language has its own page; where a text is not on the
+website, its page says so and links to the edition that exists. The website is built from the editions' sources and
+published from this repository with GitHub Pages (`.github/workflows/pages.yml`).
+
 ## How the editions were made
 
 The French texts are AI-transcribed from the original printings. The translations are AI-translated, mostly by
