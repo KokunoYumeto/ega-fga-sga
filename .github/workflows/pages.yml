@@ -4,9 +4,14 @@
 # The site is built locally (it needs MiKTeX, pandoc and the editions) and handed over as a release asset
 # site-YYYY-MM-DD[-n].tar.gz on a release whose tag starts with "site-"; the workflow is run on main with that tag
 # (gh workflow run pages.yml --ref main -f tag=TAG; the github-pages environment deploys from main only).  It deploys
-# that tarball as a Pages artifact and then deletes the release and its tag, so no built site is kept in the repository or its
-# releases: each deploy replaces the previous one, and a takedown is a rebuild and a new deploy (the previous
-# Pages artifact expires after one day).  Repository setting: Settings > Pages > Source = "GitHub Actions".
+# that tarball as a Pages artifact and then deletes the release and its tag, so no built site is kept in the
+# repository or its releases: each deploy replaces the previous one, and a takedown is a rebuild and a new deploy
+# (the previous Pages artifact expires after one day).  Repository setting: Settings > Pages > Source = "GitHub
+# Actions".
+#
+# The deployment is made through the Pages REST API rather than actions/deploy-pages, whose wait for the file sync
+# is capped at ten minutes; the full site takes longer to sync.  Each run deploys under its own build version
+# (commit and run id), so the same commit can be deployed again.
 name: Publish the site
 on:
   workflow_dispatch:
@@ -18,6 +23,7 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  actions: read
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -25,9 +31,10 @@ jobs:
   deploy:
     if: startsWith(inputs.tag, 'site-')
     runs-on: ubuntu-latest
+    timeout-minutes: 75
     environment:
       name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
+      url: https://kokunoyumeto.github.io/ega-fga-sga/
     env:
       GH_TOKEN: ${{ github.token }}
       TAG: ${{ inputs.tag }}
@@ -42,10 +49,23 @@ jobs:
         with:
           path: site
           retention-days: 1
-      - id: deploy
-        uses: actions/deploy-pages@v4
-        with:
-          timeout: 1800000
+      - name: Deploy to GitHub Pages and wait for the files to sync
+        run: |
+          set -e
+          ART=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/artifacts" --jq '.artifacts[] | select(.name=="github-pages") | .id')
+          OIDC=$(curl -sS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL" | jq -r .value)
+          VERSION="$GITHUB_SHA-$GITHUB_RUN_ID"
+          gh api "repos/$GITHUB_REPOSITORY/pages/deployments" -X POST -F artifact_id="$ART" -f pages_build_version="$VERSION" -f oidc_token="$OIDC" --jq '{id, page_url}'
+          for i in $(seq 1 240); do
+            sleep 15
+            S=$(gh api "repos/$GITHUB_REPOSITORY/pages/deployments/$VERSION" --jq .status || echo error)
+            echo "$(date -u +%H:%M:%S) $S"
+            case "$S" in
+              succeed) exit 0 ;;
+              deployment_failed|deployment_lost|deployment_content_failed|deployment_cancelled|deployment_attempt_error) exit 1 ;;
+            esac
+          done
+          echo "The deployment did not finish within an hour"; exit 1
       - name: Delete the release, so the built site is not kept
         if: success()
         run: gh release delete "$TAG" -R "$GITHUB_REPOSITORY" --yes --cleanup-tag
