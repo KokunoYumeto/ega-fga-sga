@@ -41,6 +41,7 @@ jobs:
           mkdir site
           tar -xzf dl/site-*.tar.gz -C site
           test -f site/index.html && test -f site/404.html
+          echo "$(find site -type f | wc -l) files, $(du -sh site | cut -f1)"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
