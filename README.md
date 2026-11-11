@@ -12,7 +12,8 @@ PDF is.
 
 The website <https://kokunoyumeto.github.io/ega-fga-sga/> presents the text of the FGA and SGA editions held here, in
 French, English and Spanish: FGA in all three languages; in French SGA 5, SGA 6 and SGA 7 (tomes I and II); in
-English SGA 1, SGA 2, SGA 4½, SGA 5, SGA 6 and SGA 7; in Spanish SGA 1 and SGA 7. Each exposé has its own page with the printed page numbers, links
+English SGA 1, SGA 2, SGA 3, SGA 4, SGA 4½, SGA 5, SGA 6 and SGA 7; in Spanish SGA 1, SGA 4½ and SGA 7. The French
+SGA 3 pages credit and link the edition by Philippe Gille and Patrick Polo. Each exposé has its own page with the printed page numbers, links
 between the numbered statements and a search; machine-readable indexes of the statements and references (CSV and
 JSON) are linked from the home page. Volumes and languages not yet on the website have pages that say so and link to
 the editions that exist. The website is built from the editions' sources and published from this repository with
